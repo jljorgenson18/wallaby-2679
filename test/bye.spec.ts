@@ -1,7 +1,10 @@
-import { Bye } from '../src/bye';
+//import { Bye } from '../src/bye';
 
-describe('Bye', () => {
-  let bye: Bye;
+describe('Bye', async () => {
+  
+  const { Bye } = await import('../src/bye');
+
+  let bye;
 
   beforeEach(() => {
     bye = new Bye();

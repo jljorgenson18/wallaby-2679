@@ -55,54 +55,80 @@ module.exports = function (wallaby) {
   return {
     files: [
       { pattern: 'src/**/*.ts', load: false },
-      { pattern: 'src/**/*.+(css|less|scss|svg)', instrument: false, load: false },
+      {
+        pattern: 'src/**/*.+(css|less|scss|svg)',
+        instrument: false,
+        load: false,
+      }
     ],
 
     tests: [{ pattern: 'test/**/*.spec.ts', load: false }],
 
-    postprocessor: wallaby.postprocessors.webpack({
-      module: {
-        rules: [
-          {
-            test: /\.ts$/,
-            exclude: /node_modules/,
-            use: {
-              loader: 'ts-loader',
-              options: {
-                transpileOnly: true,
+    postprocessor: wallaby.postprocessors.webpack(
+      {
+        module: {
+          rules: [
+            {
+              test: /\.ts$/,
+              exclude: /node_modules/,
+              use: {
+                loader: 'ts-loader',
+                options: {
+                  transpileOnly: true,
+                },
               },
             },
-          },
-          {
-            test: /.less$/,
-            oneOf: [
-              {
-                resourceQuery: /module/,
-                use: [styleLoader, moduleCSSLoader, postCSSLoader, lessLoader],
-              },
-              {
-                use: [styleLoader, globalCSSLoader, postCSSLoader, lessLoader],
-              },
-            ],
-          },
-          {
-            test: /.s?css$/,
-            oneOf: [
-              {
-                resourceQuery: /module/,
-                use: [styleLoader, moduleCSSLoader, postCSSLoader, sassLoader],
-              },
-              {
-                use: [styleLoader, globalCSSLoader, postCSSLoader, sassLoader],
-              },
-            ],
-          },
-        ],
-      },
-      resolve: {
-        extensions: ['.ts', '.js'],
-      },
-    }),
+            {
+              test: /.less$/,
+              oneOf: [
+                {
+                  resourceQuery: /module/,
+                  use: [
+                    styleLoader,
+                    moduleCSSLoader,
+                    postCSSLoader,
+                    lessLoader,
+                  ],
+                },
+                {
+                  use: [
+                    styleLoader,
+                    globalCSSLoader,
+                    postCSSLoader,
+                    lessLoader,
+                  ],
+                },
+              ],
+            },
+            {
+              test: /.s?css$/,
+              oneOf: [
+                {
+                  resourceQuery: /module/,
+                  use: [
+                    styleLoader,
+                    moduleCSSLoader,
+                    postCSSLoader,
+                    sassLoader,
+                  ],
+                },
+                {
+                  use: [
+                    styleLoader,
+                    globalCSSLoader,
+                    postCSSLoader,
+                    sassLoader,
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        resolve: {
+          extensions: ['.ts', '.js'],
+        },
+      }
+    ),
 
     env: {
       kind: 'chrome',
