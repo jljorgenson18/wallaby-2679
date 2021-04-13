@@ -1,26 +1,19 @@
-//import { Bye } from '../src/bye';
+import { expect } from 'chai';
 
 describe('Bye', async () => {
-  
-  const { Bye } = await import('../src/bye');
-
-  let bye;
-
-  beforeEach(() => {
-    bye = new Bye();
-  });
+  const bye = window.mediator.bye;
 
   it('should render message', () => {
     bye.render();
     const element = document.getElementById('bye');
-    expect(element.innerText).toBe('Bye');
+    expect(element.innerText).to.equal('Bye');
   });
 
   it('should render message with blue colour', () => {
     bye.render();
     const element = document.getElementById('bye');
     const style = window.getComputedStyle(element, null);
-    expect(style.getPropertyValue('color')).toBe('rgb(0, 0, 255)');
+    expect(style.getPropertyValue('color')).to.equal('rgb(0, 0, 255)');
   });
 
   afterEach(() => {

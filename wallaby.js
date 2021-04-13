@@ -59,17 +59,17 @@ module.exports = function (wallaby) {
         pattern: 'src/**/*.+(css|less|scss|svg)',
         instrument: false,
         load: false,
-      }
+      },
     ],
 
-    tests: [{ pattern: 'test/**/*.spec.ts', load: false }],
+    tests: [{ pattern: 'test/**', load: false }],
 
     postprocessor: wallaby.postprocessors.webpack(
       {
         module: {
           rules: [
             {
-              test: /\.ts$/,
+              test: /\.(j|t)s$/,
               exclude: /node_modules/,
               use: {
                 loader: 'ts-loader',
@@ -127,15 +127,32 @@ module.exports = function (wallaby) {
         resolve: {
           extensions: ['.ts', '.js'],
         },
+      },
+      {
+        setupFiles: ['setup.js'],
       }
     ),
 
-    env: {
-      kind: 'chrome',
+    setup() {
+      // Wait for the mediator to be activated
+      var interval = setInterval(() => {
+        if (window.mediator.activated) {
+          clearInterval(interval);
+          window.__moduleBundler.loadTests();
+        }
+      });
     },
 
-    setup: function () {
-      window.__moduleBundler.loadTests();
+    testFramework: 'mocha',
+    env: {
+      kind: 'chrome',
+      /** Uncomment these params to debug weird Wallaby issues in a browser instance */
+      params: {
+        runner: '--disable-gpu',
+      },
+      keepTabsOpened: true,
     },
+
+    debug: false,
   };
 };
