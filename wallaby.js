@@ -147,10 +147,10 @@ module.exports = function (wallaby) {
     env: {
       kind: 'chrome',
       /** Uncomment these params to debug weird Wallaby issues in a browser instance */
-      params: {
-        runner: '--disable-gpu',
-      },
-      keepTabsOpened: true,
+      // params: {
+      //   runner: '--disable-gpu',
+      // },
+      // keepTabsOpened: true,
     },
 
     debug: false,
